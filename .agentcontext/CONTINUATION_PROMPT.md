@@ -18,9 +18,11 @@ At the end of every phase:
 
 ## Current continuation options
 
-- Recommended: finish the main push from a writable Git environment, confirm Vercel's connected `main` deployment, then wire Neon Auth/admin persistence.
+- Recommended: from a writable Git environment, restore and push the ordinary `frontend` tree, add the three GitHub Actions Vercel secrets from `SECRET_MANAGEMENT.md`, confirm the connected `main` deployment, then wire Neon Auth/admin persistence.
 - Quality gate: add authenticated browser E2E coverage, accessibility checks, and API contract tests for Profile Lab.
 - Infrastructure: configure PostgreSQL/Redis/Groq runtime envs and test optional Object Storage/AI Gateway paths.
+
+For the recommended database/auth phase, ask the owner to install or enable only the Neon/PostgreSQL MCP and the matching Neon agent skill if their Neon setup exposes them; Playwright MCP is already available for browser verification. No additional MCP is required for the current secret rotation or frontend-tree repair.
 
 The current Vercel aliases are `optilinkai.vercel.app` and `optilink-nine.vercel.app`; `optilink.vercel.app` is owned elsewhere. Deployment Protection currently redirects unauthenticated visitors through Vercel SSO.
 

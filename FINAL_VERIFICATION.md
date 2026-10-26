@@ -53,6 +53,8 @@ VERCEL_PROJECT_ID  # prj_O8AOHBmZUsTTKnl347h5l62A6n3q
 
 The owner has now connected the GitHub repository in Vercel. Verify the first `main` deployment after the repository push. The current deployment still redirects unauthenticated visitors through Vercel Authentication; disable Deployment Protection in Vercel project settings only if this showcase is intended to be public. Never commit the token or any `.env.local` file.
 
+See [SECRET_MANAGEMENT.md](SECRET_MANAGEMENT.md) for the exact token-generation, GitHub secret, rotation, and failed-build repair procedure.
+
 ## Required environment before release
 
 Copy `backend/.env.example` to a private environment file and set production values for `DATABASE_URL`, `REDIS_URL`, `GROQ_API_KEY`, `FRONTEND_ORIGINS`, and `TRUSTED_HOSTS`. The current Neon database migration is complete; verify the target branch before any repeat. Never commit `.env` files or print secrets.

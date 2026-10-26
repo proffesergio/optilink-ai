@@ -1,6 +1,6 @@
 {
   "project": "OptiLink.ai",
-  "updated_at": "2026-10-27T02:30:00+06:00",
+  "updated_at": "2026-10-27T03:05:00+06:00",
   "current_phase": "phase_6_vercel_deploy_cicd",
   "status": "partial",
   "completed": [
@@ -35,7 +35,7 @@
     "neon_project": "passed; optilink / delicate-bar-89330718 / production ready",
     "neon_database": "passed; direct CLI SQL connection, migration, four tables, pgcrypto and vector verified",
     "neon_auth": "passed; Auth enabled, email/password enabled, verification not required",
-    "neon_env_pull": "failed; Neon API reachability error; no secret env file created",
+    "neon_env_pull": "passed; root .env.local contains Neon-managed key names and remains ignored",
     "neon_agent_setup": "partial; neon init agent flow reported MCP and skills unconfigured; PostgreSQL MCP intentionally skipped",
     "browser_smoke": "passed; frontend navigation to Profile Lab",
     "browser_accessibility": "passed after contrast fixes; axe 4.12.1 reported 0 violations",
@@ -43,12 +43,14 @@
     ,"vercel_build": "passed remotely; Next.js 16.4.3 build completed and deployment READY",
     "vercel_production_url": "passed; optilink-nine.vercel.app and optilinkai.vercel.app point to READY deployment",
     "vercel_requested_alias": "changed by owner; optilinkai.vercel.app assigned successfully, optilink.vercel.app remains in use",
-    "vercel_github_connection": "owner connected GitHub repository in Vercel; verify first main push",
+    "vercel_github_connection": "owner connected GitHub repository in Vercel; auto-deploy ran and failed because commit aa72ffec has no frontend tree",
     "vercel_public_access": "blocked; optilinkai.vercel.app returns Vercel SSO redirect while deployment protection is enabled",
-    "github_main_push": "blocked; local root .git is read-only and GitHub write API was intermittently unreachable"
+    "github_main_push": "passed; commit aa72ffec is visible on origin/main",
+    "vercel_git_deploy": "failed; commit aa72ffec removed the legacy frontend gitlink without adding frontend files, so the configured frontend root directory does not exist",
+    "secret_management": "documented; local Neon values are present, Vercel project env is empty, and CI secret names plus rotation steps are documented"
   },
   "blockers": [
-    "Owner-run neon env pull is still required to provide DATABASE_URL and Neon Auth env vars to application runtimes",
+    "Vercel project environment variables are empty; backend runtime secrets still need to be configured on the eventual FastAPI host",
     "Neon Auth SDK and authenticated route boundary are not yet wired into the frontend",
     "No real admin account was left behind; a temporary placeholder was created for CLI capability probing and deleted"
     ,"Public access still requires an owner decision to keep or disable Vercel Authentication deployment protection"
@@ -57,7 +59,8 @@
     "Recommended: owner pulls Neon env, then phase_5_auth_admin_and_persistence wires official Neon Auth SDK",
     "Quality gate: add authenticated browser E2E, API contract tests, and owner-provided admin login",
     "Infrastructure: configure Redis/Groq and test optional Object Storage/AI Gateway paths",
-    "Release: owner adds GitHub Actions Vercel secrets, pushes main, and confirms the workflow run"
+    "Release: owner adds GitHub Actions Vercel secrets, repairs the missing frontend tree, pushes main, and confirms the workflow run",
+    "Continuity: keep SECRET_MANAGEMENT.md and this state file updated after each phase; install a relevant Neon/PostgreSQL MCP or skill only if it materially reduces repeated setup work"
   ],
   "constraints": [
     "Do not persist browser authentication details",
