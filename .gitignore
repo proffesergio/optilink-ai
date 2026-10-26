@@ -1,1 +1,4 @@
 .neon
+.env
+.env.local
+.env.*.local

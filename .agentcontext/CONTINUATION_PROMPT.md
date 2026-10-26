@@ -18,8 +18,10 @@ At the end of every phase:
 
 ## Current continuation options
 
-- Recommended: Phase 5 — authentication, admin access, and persistence for the review queue.
-- Quality gate: add browser E2E coverage, accessibility checks, and API contract tests for Profile Lab.
-- Infrastructure: configure PostgreSQL/Redis/Groq and run migration plus live-service preflight.
+- Recommended: finish the main push from a writable Git environment, confirm Vercel's connected `main` deployment, then wire Neon Auth/admin persistence.
+- Quality gate: add authenticated browser E2E coverage, accessibility checks, and API contract tests for Profile Lab.
+- Infrastructure: configure PostgreSQL/Redis/Groq runtime envs and test optional Object Storage/AI Gateway paths.
+
+The current Vercel aliases are `optilinkai.vercel.app` and `optilink-nine.vercel.app`; `optilink.vercel.app` is owned elsewhere. Deployment Protection currently redirects unauthenticated visitors through Vercel SSO.
 
 The current Profile Lab is deliberately a human-review surface. It does not save profile data, publish edits, or implement admin login yet.

@@ -1,8 +1,8 @@
 {
   "project": "OptiLink.ai",
-  "updated_at": "2026-10-27T01:15:00+06:00",
-  "current_phase": "phase_4_hitl_dashboard",
-  "status": "implemented",
+  "updated_at": "2026-10-27T02:30:00+06:00",
+  "current_phase": "phase_6_vercel_deploy_cicd",
+  "status": "partial",
   "completed": [
     "Typed FastAPI settings and lifecycle wiring",
     "Structured API error responses and security headers",
@@ -12,7 +12,14 @@
     ,"Strict WebSocket scraper payloads with origin checks, monotonic sequencing, TTL memory, and credential scrubbing",
     "Groq profile gap analysis with deterministic keyword context, bounded retry, JSON validation, and human-review constraints",
     "Profile Lab UI with typed API client, reviewable keyword gaps, headline/about suggestions, copy actions, pending/error states, and no auto-publish behavior",
-    "Recovery instructions, phase completion protocol, owner verification checklist, and explicit admin-authentication gate"
+    "Recovery instructions, phase completion protocol, owner verification checklist, and explicit admin-authentication gate",
+    "Linked Neon project context to production branch without claiming offline verification",
+    "Applied and verified the reviewed PostgreSQL schema on Neon production",
+    "Verified Neon Auth is enabled and email/password sign-in is configured",
+    "Browser smoke navigation and axe audit completed; corrected nine visible contrast failures to zero violations"
+    ,"Vercel project optilink created and frontend production deployment reached READY",
+    "Vercel project root directory set to frontend and GitHub Actions production workflow added",
+    "Protected production deployment verified through Vercel authenticated curl"
   ],
   "next": "phase_5_auth_admin_and_persistence",
   "validation": {
@@ -24,12 +31,33 @@
     "external_service_checks": "not_run",
     "websocket_bridge": "source_compiled; live browser connection not run",
     "groq_engine": "source_compiled; API key and live inference not configured",
-    "local_http_server": "not verified; sandbox could not bind 127.0.0.1:8000 and no running service was reachable"
+    "local_http_server": "frontend production server verified on 127.0.0.1:3001; backend bind on 127.0.0.1:8000 unavailable in sandbox",
+    "neon_project": "passed; optilink / delicate-bar-89330718 / production ready",
+    "neon_database": "passed; direct CLI SQL connection, migration, four tables, pgcrypto and vector verified",
+    "neon_auth": "passed; Auth enabled, email/password enabled, verification not required",
+    "neon_env_pull": "failed; Neon API reachability error; no secret env file created",
+    "neon_agent_setup": "partial; neon init agent flow reported MCP and skills unconfigured; PostgreSQL MCP intentionally skipped",
+    "browser_smoke": "passed; frontend navigation to Profile Lab",
+    "browser_accessibility": "passed after contrast fixes; axe 4.12.1 reported 0 violations",
+    "auth_sdk_install": "not completed; @neondatabase/auth package install stalled under runtime registry restrictions"
+    ,"vercel_build": "passed remotely; Next.js 16.4.3 build completed and deployment READY",
+    "vercel_production_url": "passed; optilink-nine.vercel.app and optilinkai.vercel.app point to READY deployment",
+    "vercel_requested_alias": "changed by owner; optilinkai.vercel.app assigned successfully, optilink.vercel.app remains in use",
+    "vercel_github_connection": "owner connected GitHub repository in Vercel; verify first main push",
+    "vercel_public_access": "blocked; optilinkai.vercel.app returns Vercel SSO redirect while deployment protection is enabled",
+    "github_main_push": "blocked; local root .git is read-only and GitHub write API was intermittently unreachable"
   },
+  "blockers": [
+    "Owner-run neon env pull is still required to provide DATABASE_URL and Neon Auth env vars to application runtimes",
+    "Neon Auth SDK and authenticated route boundary are not yet wired into the frontend",
+    "No real admin account was left behind; a temporary placeholder was created for CLI capability probing and deleted"
+    ,"Public access still requires an owner decision to keep or disable Vercel Authentication deployment protection"
+  ],
   "next_phase_options": [
-    "Recommended: phase_5_auth_admin_and_persistence",
-    "Quality gate: browser E2E, accessibility, and API contract tests",
-    "Infrastructure: PostgreSQL, Redis, Groq configuration and migration preflight"
+    "Recommended: owner pulls Neon env, then phase_5_auth_admin_and_persistence wires official Neon Auth SDK",
+    "Quality gate: add authenticated browser E2E, API contract tests, and owner-provided admin login",
+    "Infrastructure: configure Redis/Groq and test optional Object Storage/AI Gateway paths",
+    "Release: owner adds GitHub Actions Vercel secrets, pushes main, and confirms the workflow run"
   ],
   "constraints": [
     "Do not persist browser authentication details",

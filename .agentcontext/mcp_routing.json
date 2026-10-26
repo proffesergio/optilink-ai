@@ -1,0 +1,22 @@
+{
+  "updated_at": "2026-10-27T02:00:00+06:00",
+  "browser_qa": {
+    "tool": "agent-browser / Playwright-compatible browser",
+    "status": "available",
+    "verified": ["production frontend smoke navigation", "Profile Lab accessibility audit"]
+  },
+  "neon": {
+    "cli": "neonctl 2.33.0 authorized; neon 2.33.0 agent wrapper available",
+    "project": "delicate-bar-89330718",
+    "branch": "production",
+    "status": "database and Neon Auth verified; PostgreSQL MCP intentionally skipped",
+    "skills": "not installed",
+    "mcp": "not configured by owner choice",
+    "env_pull": "blocked by Neon API reachability from this runtime"
+  },
+  "routing": [
+    "Use agent-browser for local UI smoke and axe checks.",
+    "Use neonctl psql for verified SQL/migration checks until env pull works.",
+    "Do not print or commit Neon-managed environment values."
+  ]
+}

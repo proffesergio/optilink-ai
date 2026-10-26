@@ -1,23 +1,16 @@
-# OptiLink.ai Repository Guidelines
+# Workspace Agent Specifications
 
-## Recovery-first workflow
+## Project Context
+- **Stack:** Modern web stack (adjust matching your framework: TypeScript, Next.js, Node.js).
+- **Style Rules:** Strict functional programming, clean separation of concerns, mandatory type safety.
 
-- Read `.agentcontext/active_state.json` and `.agentcontext/CONTINUATION_PROMPT.md` before changing scope.
-- Preserve dirty work. The root directory is not a usable Git checkout; the Next.js app has its own nested checkout in `frontend/.git`.
-- Update `.agentcontext/active_state.json` after each completed phase with completed work, validation evidence, blockers, and the next phase options.
-- Keep claims aligned with verified behavior. Mock dashboard data, unavailable Groq analysis, and unconfigured databases must remain labeled as such.
+## Operational Execution Protocol
+1. **Discovery Mode:** Every task must start by reading the existing architecture files using the `filesystem` tool. Do not guess file locations.
+2. **Incremental Modifications:** Make structural edits in atomic steps. Run local tests or build utilities via terminal tools after *every* change to ensure zero compilation or logical regression.
+3. **Error Remediation:** If a build command or test fails, stop updating unrelated files. Analyze the terminal stack trace and fix the failure context immediately before proceeding.
+4. **Clean Code Delivery:** Output code with modular documentation comments. Do not modify existing, unimpacted functions in the module.
 
-## Project areas
-
-- `frontend/`: Next.js 16 App Router application. Read `frontend/AGENTS.md` and the relevant installed Next.js guide before editing. Run commands from this directory.
-- `backend/`: FastAPI service. Use `backend/.venv/bin/python3` and `backend/.venv/bin/uvicorn` when available. Keep credentials in environment variables only.
-- `extension/`: browser content-script bridge. Never collect or persist cookies, authorization headers, tokens, passwords, or other browser credentials.
-- `.agentcontext/`: durable continuation state and phase handoffs. Do not put secrets in these files.
-
-## Validation
-
-For frontend changes, run `npm run lint` and then `npm run build` serially from `frontend/`. For backend changes, run `backend/.venv/bin/python3 -m compileall -q app` from `backend/` and import the FastAPI app. Database migrations and live Groq checks require explicit environment configuration and must be reported separately from local source validation.
-
-## Product boundary
-
-OptiLink suggestions are drafts for human review. Do not add automatic publishing, fabricated credentials, or a hard-coded admin account. Admin authentication is a future phase and must use a real identity/secret-management design.
+## Active Skills Applied Globally
+- `tdd_loop`: Require active failing specs before making functional changes.
+- `token_budget`: Only return target file diffs; skip verbal updates.
+- `safety_gate`: Acknowledge data safety boundaries.
