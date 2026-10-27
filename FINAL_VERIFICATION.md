@@ -55,6 +55,17 @@ The owner has now connected the GitHub repository in Vercel. Verify the first `m
 
 See [SECRET_MANAGEMENT.md](SECRET_MANAGEMENT.md) for the exact token-generation, GitHub secret, rotation, and failed-build repair procedure.
 
+## FastAPI backend deployment boundary
+
+The backend now has Vercel metadata in `backend/pyproject.toml` with the
+`app.main:app` entrypoint, pooled Neon connection defaults, and a real
+PostgreSQL readiness probe. Deploy it as a separate Vercel project with Root
+Directory `backend`; keep the existing `optilink` project rooted at
+`frontend`. Configure the pooled `DATABASE_URL` only in the backend project,
+then set the frontend's public `NEXT_PUBLIC_API_BASE_URL` to the verified API
+origin. The extension WebSocket and Redis-backed long-running work should use
+a separate long-lived runtime until their production lifecycle is verified.
+
 ## Required environment before release
 
 Copy `backend/.env.example` to a private environment file and set production values for `DATABASE_URL`, `REDIS_URL`, `GROQ_API_KEY`, `FRONTEND_ORIGINS`, and `TRUSTED_HOSTS`. The current Neon database migration is complete; verify the target branch before any repeat. Never commit `.env` files or print secrets.

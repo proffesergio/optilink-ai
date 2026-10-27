@@ -1,7 +1,7 @@
 {
   "project": "OptiLink.ai",
-  "updated_at": "2026-10-27T03:05:00+06:00",
-  "current_phase": "phase_6_vercel_deploy_cicd",
+  "updated_at": "2026-10-27T05:00:00+06:00",
+  "current_phase": "phase_7_backend_neon_vercel",
   "status": "partial",
   "completed": [
     "Typed FastAPI settings and lifecycle wiring",
@@ -19,7 +19,9 @@
     "Browser smoke navigation and axe audit completed; corrected nine visible contrast failures to zero violations"
     ,"Vercel project optilink created and frontend production deployment reached READY",
     "Vercel project root directory set to frontend and GitHub Actions production workflow added",
-    "Protected production deployment verified through Vercel authenticated curl"
+    "Protected production deployment verified through Vercel authenticated curl",
+    "FastAPI backend configured for pooled Neon runtime connections and a real PostgreSQL readiness probe",
+    "Separate backend Vercel entrypoint and deployment boundary documented"
   ],
   "next": "phase_5_auth_admin_and_persistence",
   "validation": {
@@ -36,21 +38,32 @@
     "neon_database": "passed; direct CLI SQL connection, migration, four tables, pgcrypto and vector verified",
     "neon_auth": "passed; Auth enabled, email/password enabled, verification not required",
     "neon_env_pull": "passed; root .env.local contains Neon-managed key names and remains ignored",
-    "neon_agent_setup": "partial; neon init agent flow reported MCP and skills unconfigured; PostgreSQL MCP intentionally skipped",
+    "neon_agent_setup": "owner reports Neon MCP added and CLI authorized; Neon MCP is not exposed in this agent tool surface and current CLI network checks failed",
     "browser_smoke": "passed; frontend navigation to Profile Lab",
     "browser_accessibility": "passed after contrast fixes; axe 4.12.1 reported 0 violations",
     "auth_sdk_install": "not completed; @neondatabase/auth package install stalled under runtime registry restrictions"
     ,"vercel_build": "passed remotely; Next.js 16.4.3 build completed and deployment READY",
     "vercel_production_url": "passed; optilink-nine.vercel.app and optilinkai.vercel.app point to READY deployment",
     "vercel_requested_alias": "changed by owner; optilinkai.vercel.app assigned successfully, optilink.vercel.app remains in use",
-    "vercel_github_connection": "owner connected GitHub repository in Vercel; auto-deploy ran and failed because commit aa72ffec has no frontend tree",
+    "vercel_github_connection": "owner connected GitHub repository in Vercel; commit 40c3456 still contains frontend as a 160000 gitlink, so the root tree remains broken",
     "vercel_public_access": "blocked; optilinkai.vercel.app returns Vercel SSO redirect while deployment protection is enabled",
     "github_main_push": "passed; commit aa72ffec is visible on origin/main",
     "vercel_git_deploy": "failed; commit aa72ffec removed the legacy frontend gitlink without adding frontend files, so the configured frontend root directory does not exist",
-    "secret_management": "documented; local Neon values are present, Vercel project env is empty, and CI secret names plus rotation steps are documented"
+    "secret_management": "documented; local Neon values are present, Vercel project env is empty, and CI secret names plus rotation steps are documented",
+    "backend_architecture": "implemented; pooled asyncpg settings, statement cache disabled for Neon pooler, real SELECT 1 readiness probe, and separate backend Vercel metadata",
+    "backend_dependency_validation": "blocked; existing backend/.venv lacks asyncpg and sandbox DNS prevented pip install and live Neon probe",
+    "backend_source_validation": "passed; compile/import/config checks and degraded startup behavior verified without database credentials",
+    "backend_deployment_probe": "failed; CLI deployment from backend/ reports Root Directory backend does not exist because it resolves to backend/backend; deploy from repository root after linking it to optilink-api",
+    "vercel_project_inspection": "blocked; linked project is optilink-api but Vercel project/env/log API requests currently return fetch failed",
+    "vercel_cli_login": "passed; device authorization completed, but api.vercel.com DNS remains unavailable in the terminal",
+    "backend_source_hygiene": "cleanup deletions are staged from an earlier script run; local backend/.venv remains untouched",
+    "release_script": "fixed missing rg dependency; detects gitlink mode using awk, supports resuming after partial staging, and scans only staged additions/modifications for secrets and generated files"
   },
   "blockers": [
-    "Vercel project environment variables are empty; backend runtime secrets still need to be configured on the eventual FastAPI host",
+    "Run the corrected scripts/prepare-release-tree.sh from a writable root checkout; inspect staged changes, verify frontend is mode 040000, then commit and push",
+    "Backend Vercel environment variables are not independently confirmed because the Vercel API currently returns fetch failed; verify names and production scope in the dashboard",
+    "Backend production invocation failure needs Vercel runtime logs and a check that DATABASE_URL is pooled and REDIS_URL is absent or reachable",
+    "Backend production deployment must be retried from the repository root; terminal DNS currently prevents this agent from issuing the Vercel CLI deployment",
     "Neon Auth SDK and authenticated route boundary are not yet wired into the frontend",
     "No real admin account was left behind; a temporary placeholder was created for CLI capability probing and deleted"
     ,"Public access still requires an owner decision to keep or disable Vercel Authentication deployment protection"
@@ -60,7 +73,8 @@
     "Quality gate: add authenticated browser E2E, API contract tests, and owner-provided admin login",
     "Infrastructure: configure Redis/Groq and test optional Object Storage/AI Gateway paths",
     "Release: owner adds GitHub Actions Vercel secrets, repairs the missing frontend tree, pushes main, and confirms the workflow run",
-    "Continuity: keep SECRET_MANAGEMENT.md and this state file updated after each phase; install a relevant Neon/PostgreSQL MCP or skill only if it materially reduces repeated setup work"
+    "Continuity: keep SECRET_MANAGEMENT.md and this state file updated after each phase; install a relevant Neon/PostgreSQL MCP or skill only if it materially reduces repeated setup work",
+    "Backend release: create a separate Vercel project rooted at backend, add pooled DATABASE_URL and verified runtime secrets, then run /api/v1/health and /api/v1/ready"
   ],
   "constraints": [
     "Do not persist browser authentication details",

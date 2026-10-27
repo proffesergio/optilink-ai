@@ -50,16 +50,44 @@ Neon Auth is enabled, but the application dashboard is not protected by Neon Aut
 
 ## Repair the current failed Vercel build
 
-The pushed commit removed the legacy `frontend` gitlink without adding the frontend files. From a writable clone on `main`, restore the frontend tree as ordinary tracked files:
+The pushed commit still contains the legacy `frontend` gitlink. From a writable clone on `main`, move the nested repository metadata out temporarily so the root repository records ordinary frontend files:
 
 ```bash
-git rm --cached -r frontend 2>/dev/null || true
-git add -f frontend/app frontend/components frontend/lib frontend/public \
-  frontend/*.json frontend/*.md frontend/*.ts frontend/*.mjs frontend/.gitignore
+git rm --cached frontend 2>/dev/null || true
+mv frontend/.git ../optilink-frontend-git-backup
+git add frontend
 git add .agentcontext .github .gitignore AGENTS.md FINAL_VERIFICATION.md SECRET_MANAGEMENT.md
 git ls-files frontend/app/page.tsx
+git diff --cached --summary -- frontend
 git commit -m "fix: restore frontend tree for Vercel CI"
+git ls-tree HEAD frontend
 git push origin main
 ```
 
-The `git ls-files` command must print `frontend/app/page.tsx` before pushing. The next `main` push should then use Vercel's configured `frontend` root directory.
+The staged `git ls-files` command must print `frontend/app/page.tsx`. After the commit, `git ls-tree HEAD frontend` must show mode `040000`, not `160000`, before pushing. Restore the nested metadata after the commit if needed:
+
+```bash
+mv ../optilink-frontend-git-backup frontend/.git
+```
+
+The next `main` push should then use Vercel's configured `frontend` root directory.
+
+## Remove generated backend artifacts from Git
+
+The backend virtual environment and Python bytecode are local build artifacts,
+not deployment source. Remove them from the root Git index while preserving the
+local files:
+
+```bash
+git rm -r --cached -- ':(glob)backend/.venv/**' \
+  ':(glob)backend/**/__pycache__/**' \
+  ':(glob)backend/**/*.py[cod]'
+git add .gitignore backend/.gitignore
+if git diff --cached --name-status | rg -q '^[AM]\s+.*(\.venv/|__pycache__/|\.py[cd]$)'; then
+  echo "Generated backend artifacts are still staged"
+  exit 1
+fi
+```
+
+This must be included in the next root-repository commit. It leaves the local
+virtual environment intact and lets Vercel install only `requirements.txt`.

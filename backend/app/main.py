@@ -12,7 +12,7 @@ from app.api.v1.optimization import router as optimization_router
 from app.core.config import get_settings
 from app.core.errors import register_exception_handlers
 from app.core.security import SecurityHeadersMiddleware
-from app.db import lifespan_resources
+from app.db import database_ping, lifespan_resources
 from app.schemas import HealthResponse, ReadinessResponse, RootResponse
 
 settings = get_settings()
@@ -72,7 +72,7 @@ async def readiness(request: Request) -> ReadinessResponse:
 
     database_status = "not_configured"
     if settings.database_url:
-        database_status = "ok" if getattr(request.app.state, "postgres_pool", None) else "unavailable"
+        database_status = "ok" if await database_ping(getattr(request.app.state, "postgres_pool", None)) else "unavailable"
     redis_status = "not_configured"
     if settings.redis_url:
         redis_status = "ok" if getattr(request.app.state, "redis", None) else "unavailable"

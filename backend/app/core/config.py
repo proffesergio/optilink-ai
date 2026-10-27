@@ -20,8 +20,11 @@ class Settings(BaseModel):
     api_prefix: str = "/api/v1"
 
     database_url: str | None = Field(default=None, repr=False)
-    database_pool_min_size: int = Field(default=1, ge=1, le=20)
-    database_pool_max_size: int = Field(default=10, ge=1, le=50)
+    # Serverless instances should not reserve a connection while idle. Neon
+    # supplies a pooled DATABASE_URL for request-driven runtimes.
+    database_pool_min_size: int = Field(default=0, ge=0, le=20)
+    database_pool_max_size: int = Field(default=5, ge=1, le=50)
+    database_statement_cache_size: int = Field(default=0, ge=0, le=1_000)
     redis_url: str | None = Field(default=None, repr=False)
 
     groq_api_key: SecretStr | None = Field(default=None, repr=False)
@@ -73,8 +76,9 @@ class Settings(BaseModel):
             log_level=value("LOG_LEVEL", "INFO"),
             api_prefix=value("API_PREFIX", "/api/v1"),
             database_url=os.environ.get("DATABASE_URL"),
-            database_pool_min_size=int(value("DATABASE_POOL_MIN_SIZE", 1)),
-            database_pool_max_size=int(value("DATABASE_POOL_MAX_SIZE", 10)),
+            database_pool_min_size=int(value("DATABASE_POOL_MIN_SIZE", 0)),
+            database_pool_max_size=int(value("DATABASE_POOL_MAX_SIZE", 5)),
+            database_statement_cache_size=int(value("DATABASE_STATEMENT_CACHE_SIZE", 0)),
             redis_url=os.environ.get("REDIS_URL"),
             groq_api_key=SecretStr(groq_key) if groq_key else None,
             groq_model=value("GROQ_MODEL", "llama-3.3-70b-versatile"),

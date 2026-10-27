@@ -18,7 +18,7 @@ At the end of every phase:
 
 ## Current continuation options
 
-- Recommended: from a writable Git environment, restore and push the ordinary `frontend` tree, add the three GitHub Actions Vercel secrets from `SECRET_MANAGEMENT.md`, confirm the connected `main` deployment, then wire Neon Auth/admin persistence.
+- Recommended: from a writable Git environment, convert the nested `frontend` gitlink into an ordinary tracked tree using the backup procedure in `SECRET_MANAGEMENT.md`, add the three GitHub Actions Vercel secrets, confirm the connected `main` deployment, then wire Neon Auth/admin persistence.
 - Quality gate: add authenticated browser E2E coverage, accessibility checks, and API contract tests for Profile Lab.
 - Infrastructure: configure PostgreSQL/Redis/Groq runtime envs and test optional Object Storage/AI Gateway paths.
 
@@ -27,3 +27,12 @@ For the recommended database/auth phase, ask the owner to install or enable only
 The current Vercel aliases are `optilinkai.vercel.app` and `optilink-nine.vercel.app`; `optilink.vercel.app` is owned elsewhere. Deployment Protection currently redirects unauthenticated visitors through Vercel SSO.
 
 The current Profile Lab is deliberately a human-review surface. It does not save profile data, publish edits, or implement admin login yet.
+
+The backend now has a separate Vercel deployment shape under `backend/`: FastAPI entrypoint metadata, pooled Neon runtime settings, and a real database readiness probe. The HTTP API can be deployed as a separate Vercel project rooted at `backend`; the extension WebSocket still requires a tested long-lived/realtime host.
+
+For a manual deployment of the `optilink-api` Vercel project, run Vercel from
+the repository root after linking that root to `optilink-api`. Its configured
+Root Directory is `backend`, so running the CLI inside `backend/` causes an
+invalid `backend/backend` lookup. Use `scripts/prepare-release-tree.sh` from a
+writable root Git checkout to convert the frontend gitlink and remove generated
+backend artifacts from the index before the next push.
