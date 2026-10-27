@@ -57,8 +57,8 @@ See [SECRET_MANAGEMENT.md](SECRET_MANAGEMENT.md) for the exact token-generation,
 
 ## FastAPI backend deployment boundary
 
-The backend now has Vercel metadata in `backend/pyproject.toml` with the
-`app.main:app` entrypoint, pooled Neon connection defaults, and a real
+The backend exposes a conventional `backend/main.py` entrypoint for Vercel,
+uses pooled Neon connection defaults, and has a real
 PostgreSQL readiness probe. Deploy it as a separate Vercel project with Root
 Directory `backend`; keep the existing `optilink` project rooted at
 `frontend`. Configure the pooled `DATABASE_URL` only in the backend project,

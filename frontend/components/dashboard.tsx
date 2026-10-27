@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ProfileLab } from "@/components/profile-lab";
+import { ChatStudio } from "@/components/chat-studio";
 import { type Lead, type LeadSortKey, useDashboardStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +17,7 @@ const navigation = [
   { label: "Profile lab", icon: Sparkles },
   { label: "Lead signals", icon: Users },
   { label: "Content queue", icon: FileText },
+  { label: "Content studio", icon: Sparkles },
 ];
 
 const actionItems = [
@@ -76,7 +78,7 @@ export function Dashboard() {
 
     <div className="lg:pl-[250px]"><header className="sticky top-0 z-20 flex h-[76px] items-center justify-between border-b border-[#e0e6df] bg-[#f5f7f3]/90 px-5 backdrop-blur-md sm:px-8"><div className="flex items-center gap-3"><Button variant="icon" className="lg:hidden" aria-label="Open navigation" onClick={() => setMobileNavOpen(true)}><Menu size={18} /></Button><div className="text-sm text-[#56655d]">Workspace <span className="mx-2 text-[#b7c0b9]">/</span> <span className="font-semibold text-[#26342d]">Overview</span></div></div><div className="flex items-center gap-2 sm:gap-4"><button className="relative grid h-10 w-10 place-items-center rounded-xl text-[#718078] hover:bg-white" aria-label="Notifications"><Bell size={18} /><span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#b1cc45]" /></button><Button variant="primary" className="hidden sm:inline-flex"><Plus size={16} /> New workflow</Button><div className="grid h-9 w-9 place-items-center rounded-full bg-[#273b34] text-xs font-bold text-[#e8ff70] sm:hidden">AK</div></div></header>
 
-      <main className="mx-auto max-w-[1440px] px-5 py-8 sm:px-8 sm:py-10">{activeSection === "Profile lab" ? <ProfileLab /> : <><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="mb-2 text-sm font-semibold text-[#5a6f28]">Tuesday, October 27, 2026</p><h1 className="text-[clamp(2rem,4vw,3.25rem)] font-bold leading-none tracking-[-0.07em]">Good morning, Alex<span className="text-[#b7cc5b]">.</span></h1><p className="mt-4 max-w-xl text-sm leading-6 text-[#5d6d64]">Your growth system is moving. Here’s where your strongest signals and next best actions are today.</p></div><Button variant="secondary" className="self-start sm:self-auto"><Compass size={16} /> Weekly view <ChevronDown size={15} className="text-[#98a49c]" /></Button></div>
+      <main className="mx-auto max-w-[1440px] px-5 py-8 sm:px-8 sm:py-10">{activeSection === "Profile lab" ? <ProfileLab /> : activeSection === "Content studio" ? <ChatStudio /> : <><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="mb-2 text-sm font-semibold text-[#5a6f28]">Tuesday, October 27, 2026</p><h1 className="text-[clamp(2rem,4vw,3.25rem)] font-bold leading-none tracking-[-0.07em]">Good morning, Alex<span className="text-[#b7cc5b]">.</span></h1><p className="mt-4 max-w-xl text-sm leading-6 text-[#5d6d64]">Your growth system is moving. Here’s where your strongest signals and next best actions are today.</p></div><Button variant="secondary" className="self-start sm:self-auto"><Compass size={16} /> Weekly view <ChevronDown size={15} className="text-[#98a49c]" /></Button></div>
 
         <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Performance summary"><MetricCard label="Profile strength" value="78" suffix="/100" detail="↑ 6 pts this month" icon={<Gauge size={18} />} accent="lime" /><MetricCard label="Profile views" value="2,481" detail="↑ 18.4% vs last month" icon={<BarChart3 size={18} />} accent="blue" /><MetricCard label="Active signals" value="12" detail="4 high-intent leads" icon={<Users size={18} />} accent="purple" /><MetricCard label="Reply rate" value="24.8%" detail="↑ 4.2% this month" icon={<ArrowUpRight size={18} />} accent="orange" /></section>
 

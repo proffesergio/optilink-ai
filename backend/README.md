@@ -22,23 +22,11 @@ from a private environment file instead.
 
 Deploy this directory as a separate Vercel project, for example
 `optilink-api`, with the Vercel Root Directory set to `backend`. Vercel detects
-the FastAPI application using `pyproject.toml` and the `app.main:app`
-entrypoint. Add `DATABASE_URL` as a server-side Production environment
+the FastAPI application from the conventional `main.py` entrypoint. Add
+`DATABASE_URL` as a server-side Production environment
 variable, using Neon's pooled URL. Add `GROQ_API_KEY`, `REDIS_URL`,
 `FRONTEND_ORIGINS`, and `TRUSTED_HOSTS` only when those services are deployed
 and verified.
-
-From `backend/` after linking the separate project:
-
-```bash
-vercel link
-vercel env add DATABASE_URL production
-vercel env add FRONTEND_ORIGINS production
-vercel env add TRUSTED_HOSTS production
-vercel --prod
-```
-
-### Important CLI working directory rule
 
 For the Git-connected `optilink-api` project, Vercel Root Directory is
 `backend`. A manual CLI deployment must therefore start from the repository

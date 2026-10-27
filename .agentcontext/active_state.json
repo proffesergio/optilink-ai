@@ -53,10 +53,11 @@
     "backend_architecture": "implemented; pooled asyncpg settings, statement cache disabled for Neon pooler, real SELECT 1 readiness probe, and separate backend Vercel metadata",
     "backend_dependency_validation": "blocked; existing backend/.venv lacks asyncpg and sandbox DNS prevented pip install and live Neon probe",
     "backend_source_validation": "passed; compile/import/config checks and degraded startup behavior verified without database credentials",
-    "backend_deployment_probe": "failed; CLI deployment from backend/ reports Root Directory backend does not exist because it resolves to backend/backend; deploy from repository root after linking it to optilink-api",
+    "backend_deployment_probe": "production /api/v1/health still returns FUNCTION_INVOCATION_FAILED; the later CLI deploy from backend/ failed before deployment because Root Directory backend resolved to backend/backend",
     "vercel_project_inspection": "blocked; linked project is optilink-api but Vercel project/env/log API requests currently return fetch failed",
     "vercel_cli_login": "passed; device authorization completed, but api.vercel.com DNS remains unavailable in the terminal",
-    "backend_source_hygiene": "cleanup deletions are staged from an earlier script run; local backend/.venv remains untouched",
+    "backend_source_hygiene": "passed in pushed commit 676c1de; frontend is an ordinary tree and generated backend venv/cache are absent from HEAD",
+    "backend_entrypoint": "added conventional backend/main.py exporting app; removed custom module entrypoint setting to simplify Vercel detection",
     "release_script": "fixed missing rg dependency; detects gitlink mode using awk, supports resuming after partial staging, and scans only staged additions/modifications for secrets and generated files"
   },
   "blockers": [
